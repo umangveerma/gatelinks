@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
 
-import Resources from "../models/resource";
+import Resources from "../../models/tokenResource";
 
-const resource = async (req: Request, res: Response) => {
+const createResourceViaToken = async (req: Request, res: Response) => {
   const user = req.body.user;
   const title = req.body.title;
   const description = req.body.description;
   const url = req.body.url;
-  const updateAuthority = req.body.updateAuthority;
+  const mintAddress = req.body.mintAddress;
+  const tokenName = req.body.tokenName;
 
-  if (!(user || title || description || url || updateAuthority)) {
+  if (!(user || title || description || url || mintAddress || tokenName)) {
     return res.status(400).json({
       message: "Missing required fields",
     });
@@ -21,7 +22,8 @@ const resource = async (req: Request, res: Response) => {
       title: title,
       description: description,
       url: url,
-      updateAuthority: updateAuthority,
+      mintAddress: mintAddress,
+      tokenName: tokenName,
     });
 
     await resource.save();
@@ -37,4 +39,4 @@ const resource = async (req: Request, res: Response) => {
   }
 };
 
-export default resource;
+export default createResourceViaToken;

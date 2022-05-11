@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 
-import verifyAddress from "../utils/verifyAddress";
-import getNfts from "../utils/getNfts";
+import verifyAddress from "../../utils/verifyAddress";
+import getNfts from "../../utils/getNfts";
 
-const verifyAuthority = async (req: Request, res: Response) => {
+const verifyNftAuthority = async (req: Request, res: Response) => {
   const walletAddress = req.body.walletAddress;
   const updateAuthority = req.body.updateAuthority;
 
@@ -32,4 +32,4 @@ const verifyAuthority = async (req: Request, res: Response) => {
   }
 };
 
-export default verifyAuthority;
+export default verifyNftAuthority;

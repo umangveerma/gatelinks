@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ResourceSchema = new mongoose.Schema({
+const TokenResourceSchema = new mongoose.Schema({
   user: {
     type: String,
     required: true,
@@ -17,10 +17,14 @@ const ResourceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  updateAuthority: {
+  mintAddress: {
+    type: String,
+    required: true,
+  },
+  tokenName: {
     type: String,
     required: true,
   },
 });
 
-export default mongoose.model("Resource", ResourceSchema);
+export default mongoose.model("TokenResource", TokenResourceSchema);

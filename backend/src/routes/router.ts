@@ -1,15 +1,17 @@
 import express from "express";
 
-import resource from "../controllers/resource";
-import verifyAuthority from "../controllers/verifyAuthority";
-import resourcesByUser from "../controllers/resourcesByUser";
+import createResourceViaNft from "../controllers/create/nft";
+import createResourceViaToken from "../controllers/create/token";
+import verifyNftAuthority from "../controllers/verify/nft";
+import verifyTokenAuthority from "../controllers/verify/token";
 
 import verifyToken from "../middlewares/verifyToken";
 
 const router = express.Router();
 
-router.post("/resource", verifyToken, resource);
-router.get("/verifyAuthority", verifyAuthority);
-router.get("/resourcesByUser", resourcesByUser);
+router.post("/create/nft", verifyToken, createResourceViaNft);
+router.get("/verify/nft", verifyNftAuthority);
+router.post("/create/token", verifyToken, createResourceViaToken);
+router.get("/verify/token", verifyTokenAuthority);
 
 export default router;

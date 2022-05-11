@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import Resources from "../models/resource";
+import Resources from "../models/nftResource";
 
 const resourceByUser = async (req: Request, res: Response) => {
   const user = req.body.user;
