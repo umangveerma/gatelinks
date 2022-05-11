@@ -17,7 +17,7 @@ import { FiLogOut } from "react-icons/fi";
 import { AiOutlineUser } from "react-icons/ai";
 
 interface Props {
-  handleCreateClick: () => void;
+  handleCreateClick?: () => void;
 }
 
 const NavBar: NextComponentType<NextPageContext, {}, Props> = ({

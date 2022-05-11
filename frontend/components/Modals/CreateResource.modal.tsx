@@ -37,7 +37,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
         <ModalContent>
           <ModalCloseButton _focus={{}} color="white" />
 
-          <ModalBody bgColor="#101827" py="8" px="8">
+          <ModalBody bgColor="gray.700" py="8" px="8">
             <Tabs isFitted variant="enclosed" textColor="gray.100">
               <TabList>
                 <Tab
@@ -55,7 +55,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
                   TKN
                 </Tab>
               </TabList>
-
+              {/* will change the input boxes later :cheems: depending on the tab */}
               <TabPanels>
                 <TabPanel>
                   <Text

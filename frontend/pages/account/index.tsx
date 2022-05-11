@@ -1,21 +1,21 @@
 import type { NextPage } from "next";
 import { NavBar, CreateModal } from "../../components";
-import { Box, Image, Text, useDimensions, useDisclosure } from "@chakra-ui/react";
+import { Box, Image, Text, Center, useDisclosure } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 
 const Account: NextPage = () => {
   const { user } = useUser();
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-    <CreateModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <CreateModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <NavBar handleCreateClick={onOpen} />
 
       <Box
         bgColor="#F9F7F1"
         w="full"
-        py="4"
+        py="8"
         display="flex"
         flexDir="column"
         gap="2"
@@ -61,6 +61,21 @@ const Account: NextPage = () => {
           {" "}
           Created Resources{" "}
         </Text>
+
+        <Box my="12">
+          <Center>
+            <Box w="70%" py="3" px="6" bgColor="gray.600" rounded="lg">
+              <Text
+                textColor="gray.100"
+                fontFamily="redHat"
+                fontSize="xl"
+                fontWeight="600"
+              >
+                Title
+              </Text>
+            </Box>
+          </Center>
+        </Box>
       </Box>
     </>
   );
