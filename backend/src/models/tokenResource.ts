@@ -25,6 +25,14 @@ const TokenResourceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resourceId: {
+    type: String,
+    required: true,
+  },
+  verificationType: {
+    type: String,
+    default: "tkn",
+  },
 });
 
-export default mongoose.model("TokenResource", TokenResourceSchema);
+export default mongoose.model("token", TokenResourceSchema);
