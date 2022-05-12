@@ -16,17 +16,36 @@ const TNKForm: NextComponentType = ({}) => {
   const [formData, setFormData] = useState<any>();
   const { user } = useUser();
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => setFormData(data);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const submit = (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    handleSubmit(onSubmit);
+  const handleClick = () => {
+    const data = {
+      user: user?.email,
+      ...formData,
+    };
+
+    console.log(data);
+    axios
+      .get("/api/access")
+      .then((res) => {
+        console.log(res.data);
+
+        axios
+          .post(
+            "https://gatelinks-production.up.railway.app/api/create/token",
+            data,
+            { headers: { Authorization: `Bearer ${res.data.data}` } }
+          )
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   };
 
+
   return (
-    <form onSubmit={(e: any) => submit(e)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Box
         my="10"
         display="flex"
@@ -62,7 +81,7 @@ const TNKForm: NextComponentType = ({}) => {
           fontSize="sm"
           placeholder="enter a short desc"
           _placeholder={{ color: "#606366", fontWeight: "500" }}
-          {...register("desc")}
+          {...register("description")}
         />
         <Input
           textColor="gray.700"
@@ -91,7 +110,7 @@ const TNKForm: NextComponentType = ({}) => {
           fontSize="sm"
           placeholder="mint address for the NFT"
           _placeholder={{ color: "#606366", fontWeight: "500" }}
-          {...register("mintAddr")}
+          {...register("mintAddress")}
         />
         <Input
           textColor="gray.700"
@@ -105,13 +124,14 @@ const TNKForm: NextComponentType = ({}) => {
           fontSize="sm"
           placeholder="name of the SPL Token"
           _placeholder={{ color: "#606366", fontWeight: "500" }}
-          {...register("nameSPL")}
+          {...register("tokenName")}
         />
 
         <Button
           colorScheme="messenger"
           isLoading={loading}
           type="submit"
+        onClick={handleClick}
           _active={{}}
           _focus={{}}
         >
