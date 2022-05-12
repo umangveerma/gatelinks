@@ -1,5 +1,5 @@
 import type { NextComponentType, NextPageContext } from "next";
-import { useState } from "react";
+import { NFTForm } from "..";
 import {
   Modal,
   ModalOverlay,
@@ -16,6 +16,7 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
+import TNKForm from "../Misc/TNKForm.form";
 
 interface Props {
   isOpen: boolean;
@@ -28,8 +29,6 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
   onOpen,
   onClose,
 }) => {
-  const [loading, setLoading] = useState<boolean>();
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -37,7 +36,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
         <ModalContent>
           <ModalCloseButton _focus={{}} color="white" />
 
-          <ModalBody bgColor="gray.700" py="8" px="8">
+          <ModalBody bgColor="gray.800" py="8" px="8">
             <Tabs isFitted variant="enclosed" textColor="gray.100">
               <TabList>
                 <Tab
@@ -68,78 +67,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
                     Upload w NFT thingy{" "}
                   </Text>
 
-                  <Box
-                    my="10"
-                    display="flex"
-                    flexDir="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    gap="4"
-                    fontFamily="poppins"
-                  >
-                    <Input
-                      bgColor="#F9F7FB"
-                      textColor="gray.700"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="please enter title..."
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-                    <Input
-                      textColor="gray.700"
-                      bgColor="#F9F7FB"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="enter a short desc"
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-                    <Input
-                      textColor="gray.700"
-                      bgColor="#F9F7FB"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="url for the resource"
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-                    <Input
-                      textColor="gray.700"
-                      bgColor="#F9F7FB"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="contract address"
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-
-                    <Button
-                      colorScheme="messenger"
-                      isLoading={loading}
-                      onClick={() => setLoading(true)}
-                      _active={{}}
-                      _focus={{}}
-                    >
-                      Upload
-                    </Button>
-                  </Box>
+                  <NFTForm />
                 </TabPanel>
                 <TabPanel>
                   <Text
@@ -152,78 +80,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
                     Upload w TKN thingy{" "}
                   </Text>
 
-                  <Box
-                    my="10"
-                    display="flex"
-                    flexDir="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    gap="4"
-                    fontFamily="poppins"
-                  >
-                    <Input
-                      textColor="gray.700"
-                      bgColor="#F9F7FB"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="please enter title..."
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-                    <Input
-                      textColor="gray.700"
-                      bgColor="#F9F7FB"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="enter a short desc"
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-                    <Input
-                      textColor="gray.700"
-                      bgColor="#F9F7FB"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="url for the resource"
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-                    <Input
-                      textColor="gray.700"
-                      bgColor="#F9F7FB"
-                      _focus={{}}
-                      _active={{}}
-                      w="80"
-                      h="10"
-                      px="3"
-                      fontWeight="500"
-                      fontSize="sm"
-                      placeholder="contract address"
-                      _placeholder={{ color: "#606366", fontWeight: "500" }}
-                    />
-
-                    <Button
-                      colorScheme="messenger"
-                      isLoading={loading}
-                      onClick={() => setLoading(true)}
-                      _active={{}}
-                      _focus={{}}
-                    >
-                      Upload
-                    </Button>
-                  </Box>
+                  <TNKForm />
                 </TabPanel>
               </TabPanels>
             </Tabs>
