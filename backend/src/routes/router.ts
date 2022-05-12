@@ -14,10 +14,10 @@ const router = express.Router();
 
 router.post("/create/nft", verifyToken, createResourceViaNft);
 router.post("/create/token", verifyToken, createResourceViaToken);
-router.get("/verify/nft", verifyNftAuthority);
-router.get("/verify/token", verifyTokenAuthority);
-router.get("/info/nft", verifyToken, getNftResourceInfo);
-router.get("/info/token", verifyToken, getTokenResourceInfo);
-router.get("/info/resourcesByUser", verifyToken, resourcesByUser);
+router.post("/verify/nft", verifyNftAuthority);
+router.post("/verify/token", verifyTokenAuthority);
+router.post("/info/nft", verifyToken, getNftResourceInfo);
+router.post("/info/token", verifyToken, getTokenResourceInfo);
+router.post("/info/resourcesByUser", verifyToken, resourcesByUser);
 
 export default router;
