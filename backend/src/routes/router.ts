@@ -16,8 +16,8 @@ router.post("/create/nft", verifyToken, createResourceViaNft);
 router.post("/create/token", verifyToken, createResourceViaToken);
 router.get("/verify/nft", verifyNftAuthority);
 router.get("/verify/token", verifyTokenAuthority);
-router.get("/info/nft", getNftResourceInfo);
-router.get("/info/token", getTokenResourceInfo);
-router.get("/info/resourcesByUser", resourcesByUser);
+router.get("/info/nft", verifyToken, getNftResourceInfo);
+router.get("/info/token", verifyToken, getTokenResourceInfo);
+router.get("/info/resourcesByUser", verifyToken, resourcesByUser);
 
 export default router;
