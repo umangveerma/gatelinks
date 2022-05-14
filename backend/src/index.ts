@@ -1,4 +1,5 @@
 import express, { Request, Response, Application } from "express";
+import cors from "cors";
 
 import connectToMongo from "./helpers/connectToMongo";
 
@@ -8,6 +9,7 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({

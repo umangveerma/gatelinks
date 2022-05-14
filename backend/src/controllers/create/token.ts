@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 
 import Resources from "../../models/tokenResource";
 
+import createResourceId from "../../utils/createResourceId";
+
 const createResourceViaToken = async (req: Request, res: Response) => {
   const user = req.body.user;
   const title = req.body.title;
@@ -24,6 +26,7 @@ const createResourceViaToken = async (req: Request, res: Response) => {
       url: url,
       mintAddress: mintAddress,
       tokenName: tokenName,
+      resourceId: createResourceId(user, title, "tkn"),
     });
 
     await resource.save();

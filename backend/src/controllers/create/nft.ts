@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 
 import Resources from "../../models/nftResource";
 
+import createResourceId from "../../utils/createResourceId";
+
 const createResourceViaNft = async (req: Request, res: Response) => {
   const user = req.body.user;
   const title = req.body.title;
@@ -36,6 +38,7 @@ const createResourceViaNft = async (req: Request, res: Response) => {
       updateAuthority: updateAuthority,
       nftName: nftName,
       nftMarketplace: nftMarketplace,
+      resourceId: createResourceId(user, title, "nft"),
     });
 
     await resource.save();
