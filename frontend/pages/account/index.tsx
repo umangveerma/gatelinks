@@ -1,11 +1,34 @@
 import type { NextPage } from "next";
-import { NavBar, CreateModal } from "../../components";
+import { NavBar, CreateModal, ResourceCard } from "../../components";
 import { Box, Image, Text, Center, useDisclosure } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Account: NextPage = () => {
   const { user } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [data, setData] = useState<any>();
+  console.log(data);
+
+  useEffect(() => {
+    axios
+      .get("/api/access")
+      .then((res) => {
+        console.log(res.data);
+        axios
+          .post(
+            "https://gatelinks-production.up.railway.app/api/info/resourcesByUser",
+            { user: user?.email },
+            { headers: { Authorization: `Bearer ${res.data.data}` } }
+          )
+          .then((res) => {
+            console.log(res);
+            setData(res.data.resources);
+          });
+      })
+      .catch((err) => console.log(err));
+  }, [user]);
 
   return (
     <>
@@ -62,19 +85,21 @@ const Account: NextPage = () => {
           Created Resources{" "}
         </Text>
 
-        <Box my="12">
-          <Center>
-            <Box w="70%" py="3" px="6" bgColor="gray.600" rounded="lg">
-              <Text
-                textColor="gray.100"
-                fontFamily="redHat"
-                fontSize="xl"
-                fontWeight="600"
-              >
-                Title
-              </Text>
-            </Box>
-          </Center>
+        <Box
+          my="12"
+          display="flex"
+          flexDir="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {data?.map((d: any) => (
+            <ResourceCard
+              title={d.title}
+              desc={d.description}
+              url={d.url}
+              type={d.verificationType}
+            />
+          ))}
         </Box>
       </Box>
     </>

@@ -1,5 +1,5 @@
 import type { NextComponentType, NextPageContext } from "next";
-import { NFTForm } from "..";
+import { NFTForm, TKNForm } from "..";
 import {
   Modal,
   ModalOverlay,
@@ -16,7 +16,6 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
-import TNKForm from "../Misc/TNKForm.form";
 
 interface Props {
   isOpen: boolean;
@@ -80,7 +79,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
                     Upload w TKN thingy{" "}
                   </Text>
 
-                  <TNKForm />
+                  <TKNForm />
                 </TabPanel>
               </TabPanels>
             </Tabs>
