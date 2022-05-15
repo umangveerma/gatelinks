@@ -14,13 +14,15 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
       })
       .then((response) => {
         if (response.status === 401) {
-          return res.status(401).send("Unauthorized");
+          return res.status(401).json({
+            message: "Unauthenticated",
+          });
         } else {
           next();
         }
       })
       .catch((error) => {
-        return res.status(500).send({
+        return res.status(500).json({
           message: "Internal Server Error",
           error: error,
         });
