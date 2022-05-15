@@ -10,6 +10,7 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Link,
 } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
@@ -47,8 +48,13 @@ const NavBar: NextComponentType<NextPageContext, {}, Props> = ({
           fontWeight="600"
           fontSize="md"
         >
-          <Text>Home</Text>
-          <Text>GitHub</Text>
+          <Link href="/" _active={{}} _focus={{}}>
+            <Text>Home</Text>
+          </Link>
+
+          <Link href="/account" _active={{}} _focus={{}}>
+            <Text>Account</Text>
+          </Link>
         </Flex>
 
         <Flex gap="3">
@@ -82,7 +88,7 @@ const NavBar: NextComponentType<NextPageContext, {}, Props> = ({
                     display="flex"
                     flexDir="row"
                     gap="2"
-                    onClick={()=>router.push("/account")}
+                    onClick={() => router.push("/account")}
                   >
                     <AiOutlineUser />
                     Account
@@ -93,7 +99,7 @@ const NavBar: NextComponentType<NextPageContext, {}, Props> = ({
                     flexDir="row"
                     gap="2"
                     textColor="red.500"
-                    onClick={()=>router.push("/api/auth/logout")}
+                    onClick={() => router.push("/api/auth/logout")}
                   >
                     <FiLogOut />
                     Log Out

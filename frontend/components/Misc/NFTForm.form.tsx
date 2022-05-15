@@ -27,16 +27,14 @@ const UploadForm: NextComponentType = ({}) => {
 
     console.log(data);
     axios
-      .get("/api/access")
+      .get("api/access")
       .then((res) => {
         console.log(res.data);
 
         axios
-          .post(
-            "https://gatelinks-production.up.railway.app/api/create/nft",
-            data,
-            { headers: { Authorization: `Bearer ${res.data.data}` } }
-          )
+          .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/create/nft`, data, {
+            headers: { Authorization: `Bearer ${res.data.data}` },
+          })
           .then((res) => console.log(res))
           .catch((err) => console.log(err));
       })

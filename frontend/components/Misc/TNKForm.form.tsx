@@ -33,7 +33,7 @@ const TNKForm: NextComponentType = ({}) => {
 
         axios
           .post(
-            "https://gatelinks-production.up.railway.app/api/create/token",
+            `${process.env[`NEXT_PUBLIC_API_URL`]}/create/token`,
             data,
             { headers: { Authorization: `Bearer ${res.data.data}` } }
           )

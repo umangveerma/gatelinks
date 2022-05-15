@@ -18,7 +18,7 @@ const Account: NextPage = () => {
         console.log(res.data);
         axios
           .post(
-            "https://gatelinks-production.up.railway.app/api/info/resourcesByUser",
+            `${process.env[`NEXT_PUBLIC_API_URL`]}/info/resourcesByUser`,
             { user: user?.email },
             { headers: { Authorization: `Bearer ${res.data.data}` } }
           )
@@ -91,6 +91,7 @@ const Account: NextPage = () => {
           flexDir="column"
           justifyContent="center"
           alignItems="center"
+          gap="3"
         >
           {data?.map((d: any) => (
             <ResourceCard
