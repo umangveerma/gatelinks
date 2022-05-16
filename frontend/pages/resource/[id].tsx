@@ -24,7 +24,7 @@ const Resource: NextPage = () => {
         ? axios
             .post(
               `${process.env[`NEXT_PUBLIC_API_URL`]}/info/${
-                id.split("-")[1] as string === "nft" ? "nft" : "token"
+                (id.split("-")[1] as string) === "nft" ? "nft" : "token"
               }`,
               {
                 resourceId: id,
@@ -81,24 +81,50 @@ const Resource: NextPage = () => {
         walletAddress: walletKey,
         updateAuthority: data.updateAuthority,
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        res.status === 200
+          ? toast({
+              title: "Ownership Verified",
+              description: "Ownership verified for this NFT!",
+              status: "success",
+              duration: 4000,
+              isClosable: true,
+            })
+          : toast({
+              title: "Couldn't verify ownership",
+              description: "Oops! Looks like you don't own this NFT",
+              status: "error",
+              duration: 4000,
+              isClosable: true,
+            });
+      })
       .catch((err) => console.log(err));
   };
 
   const verifySPL = () => {
-    console.log({
-      walletAddress: walletKey,
-      mintAddress: { data },
-      amount: { data },
-    });
-    
     axios
       .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/verify/token`, {
         walletAddress: walletKey,
         mintAddress: { data },
         amount: { data },
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        res.status === 200
+          ? toast({
+              title: "Ownership Verified",
+              description: "Ownership verified for the SPL Tokens!",
+              status: "success",
+              duration: 4000,
+              isClosable: true,
+            })
+          : toast({
+              title: "Couldn't verify ownership",
+              description: "Oops! Looks like ownership isn't verified",
+              status: "error",
+              duration: 4000,
+              isClosable: true,
+            });
+      })
       .catch((err) => console.log(err));
   };
 
