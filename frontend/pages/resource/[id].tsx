@@ -3,14 +3,16 @@ import { useRouter } from "next/router";
 import { NavBar } from "../../components";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Text, Link, Button } from "@chakra-ui/react";
+import { Box, Text, Link, Button, Badge, useToast } from "@chakra-ui/react";
 import { FiExternalLink } from "react-icons/fi";
+import type { PhantomProvider } from "../../@types/Phantom.types";
 
 const Resource: NextPage = () => {
   const router = useRouter();
   const [data, setData] = useState<any>(null);
-  console.log(data);
   const [id, setId] = useState<string | undefined>(undefined);
+
+  const toast = useToast();
 
   useEffect(() => {
     router ? setId(router.query.id as string) : null;
@@ -22,7 +24,7 @@ const Resource: NextPage = () => {
         ? axios
             .post(
               `${process.env[`NEXT_PUBLIC_API_URL`]}/info/${
-                id.split("-")[1] as string
+                id.split("-")[1] as string === "nft" ? "nft" : "token"
               }`,
               {
                 resourceId: id,
@@ -35,6 +37,70 @@ const Resource: NextPage = () => {
         : null;
     });
   }, [id]);
+
+  const [provider, setProvider] = useState<PhantomProvider | undefined>(
+    undefined
+  );
+  const [walletKey, setWalletKey] = useState<PhantomProvider | undefined>(
+    undefined
+  );
+
+  const getProvider = (): PhantomProvider | undefined => {
+    if ("solana" in window) {
+      // @ts-ignore
+      const provider = window.solana as any;
+      if (provider.isPhantom) return provider as PhantomProvider;
+    }
+  };
+
+  const connectWallet = async () => {
+    // @ts-ignore
+    const { solana } = window;
+
+    if (solana) {
+      try {
+        const response = await solana.connect();
+        console.log("wallet account ", response.publicKey.toString());
+        setWalletKey(response.publicKey.toString());
+      } catch (err) {
+        // { code: 4001, message: 'User rejected the request.' }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const provider = getProvider();
+
+    if (provider) setProvider(provider);
+    else setProvider(undefined);
+  }, []);
+
+  const verifyNFT = () => {
+    axios
+      .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/verify/nft`, {
+        walletAddress: walletKey,
+        updateAuthority: data.updateAuthority,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const verifySPL = () => {
+    console.log({
+      walletAddress: walletKey,
+      mintAddress: { data },
+      amount: { data },
+    });
+    
+    axios
+      .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/verify/token`, {
+        walletAddress: walletKey,
+        mintAddress: { data },
+        amount: { data },
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -59,19 +125,77 @@ const Resource: NextPage = () => {
           alignItems="center"
           fontFamily="inter"
         >
-          <Text textColor="gray.100" fontSize="xl">
-            {data.title}
-          </Text>
-          <Text textColor="gray.300" fontSize="lg">
-            {data.description}
-          </Text>
+          {data ? (
+            <>
+              <Text textColor="gray.100" fontSize="xl">
+                {data.title}
+              </Text>
+              <Text textColor="gray.300" fontSize="lg">
+                {data.description}
+              </Text>
 
-          <Link isExternal href={data.url} textColor="white">
-            <FiExternalLink size={22} />
-          </Link>
+              <Link isExternal href={data.url} textColor="white">
+                <FiExternalLink size={22} />
+              </Link>
+            </>
+          ) : null}
         </Box>
 
-        <Button colorScheme="purple" fontFamily="inter" fontWeight="500">Verify NFT</Button>
+        {provider && !walletKey && (
+          <Button
+            colorScheme="green"
+            fontFamily="inter"
+            fontWeight="500"
+            onClick={connectWallet}
+          >
+            Connect to Phantom Wallet
+          </Button>
+        )}
+
+        {provider && walletKey && (
+          <>
+            <Badge
+              rounded="full"
+              py="1"
+              px="4"
+              display="grid"
+              placeItems="center"
+              fontFamily="poppins"
+              bgColor="purple.500"
+              textColor="white"
+            >
+              {/* @ts-ignore */}
+              {walletKey}
+            </Badge>
+
+            {id?.split("-")[1] === "nft" ? (
+              <Button
+                colorScheme="green"
+                fontFamily="inter"
+                fontWeight="500"
+                onClick={verifyNFT}
+              >
+                Verify NFT Ownership
+              </Button>
+            ) : (
+              <Button
+                colorScheme="green"
+                fontFamily="inter"
+                fontWeight="500"
+                onClick={verifySPL}
+              >
+                Verify SPL Ownership
+              </Button>
+            )}
+          </>
+        )}
+
+        {!provider && (
+          <p>
+            No provider found. Install{" "}
+            <a href="https://phantom.app/">Phantom Browser extension</a>
+          </p>
+        )}
       </Box>
     </>
   );

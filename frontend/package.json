@@ -16,6 +16,7 @@
     "@fontsource/inter": "^4.5.10",
     "@fontsource/poppins": "^4.5.8",
     "@fontsource/red-hat-display": "^4.5.9",
+    "@solana/web3.js": "^1.42.0",
     "axios": "^0.27.2",
     "framer-motion": "^6",
     "next": "12.1.6",
