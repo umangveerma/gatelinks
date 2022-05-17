@@ -1,27 +1,31 @@
-import axios from "axios";
+import {
+  resolveToWalletAddress,
+  getParsedNftAccountsByOwner,
+} from "@nfteyez/sol-rayz";
+import * as web3 from "@solana/web3.js";
 
-import constants from "../constants/constants";
+const getNfts = async (address: string) => {
+  const nfts: string[] = [];
 
-const getNfts = async (walletAddress: string) => {
-  try {
-    let config = {
-      headers: {
-        "Content-Type": "application/json",
-        APIKeyID: constants.blockchainApiKeyId as string,
-        APISecretKey: constants.blockchainApiSecretKey as string,
-      },
-    };
-    const network = "devnet";
+  const connection = new web3.Connection(
+    web3.clusterApiUrl("mainnet-beta"),
+    "confirmed"
+  );
 
-    const res = await axios.get(
-      `https://api.blockchainapi.com/v1/solana/wallet/${network}/${walletAddress}/nfts`,
-      config
-    );
+  const publicAddress = await resolveToWalletAddress({
+    text: address,
+  });
 
-    return res.data.nfts_owned;
-  } catch (err) {
-    throw err;
-  }
+  const nftArray = await getParsedNftAccountsByOwner({
+    publicAddress,
+    connection,
+  });
+
+  nftArray.forEach((nft) => {
+    nfts.push(nft.updateAuthority);
+  });
+
+  return nfts;
 };
 
 export default getNfts;

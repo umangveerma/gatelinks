@@ -1,49 +1,26 @@
-import axios from "axios";
+import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js";
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
-import constants from "../constants/constants";
+const getTokens = async (walletAddress: string) => {
+  const tokens: any[] = [];
 
-interface Token {
-  amount: string;
-  decimals: number;
-  mint_address: string;
-  token_address: string;
-  ui_amount: number;
-}
+  const connection = new Connection(clusterApiUrl("mainnet-beta"), "confirmed");
 
-const getTokens = async (
-  address: string,
-  mintAddress: string,
-  amount: string
-) => {
-  try {
-    let config = {
-      headers: {
-        "Content-Type": "application/json",
-        APIKeyID: constants.blockchainApiKeyId as string,
-        APISecretKey: constants.blockchainApiSecretKey as string,
-      },
-    };
-    const network = "mainnet-beta";
+  const owner = new PublicKey(walletAddress);
 
-    const res = await axios.get(
-      `https://api.blockchainapi.com/v1/solana/wallet/${network}/${address}/tokens`,
-      config
-    );
+  let response = await connection.getParsedTokenAccountsByOwner(owner, {
+    programId: TOKEN_PROGRAM_ID,
+  });
 
-    const tokenArr = res.data.filter((token: Token) => {
-      return token.mint_address === mintAddress;
+  response.value.forEach((accountInfo) => {
+    tokens.push({
+      mintAddress: accountInfo.account.data["parsed"]["info"]["mint"],
+      amount:
+        accountInfo.account.data["parsed"]["info"]["tokenAmount"]["amount"],
     });
+  });
 
-    const tokenData = tokenArr[0];
-
-    if (!(tokenData["amount"] >= amount)) {
-      return false;
-    } else {
-      return true;
-    }
-  } catch (err) {
-    throw err;
-  }
+  return tokens;
 };
 
 export default getTokens;

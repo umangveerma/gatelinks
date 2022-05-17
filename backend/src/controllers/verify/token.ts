@@ -21,14 +21,27 @@ const verifyTokenAuthority = async (req: Request, res: Response) => {
   }
 
   try {
-    if (await getTokens(walletAddress, mintAddress, amount)) {
-      return res.status(200).json({
-        message: "Authority verified",
-      });
-    }
+    await getTokens(walletAddress).then((tokens: any) => {
+      if (tokens.length === 0) {
+        return res.status(400).json({
+          message: "No tokens found",
+        });
+      }
 
-    return res.status(400).json({
-      message: "Authority not verified",
+      tokens.forEach((token: { mintAddress: string; amount: number }) => {
+        console.log(token);
+        if (
+          token.mintAddress === mintAddress &&
+          Number(token.amount) / 1e9 >= Number(amount)
+        ) {
+          return res.status(200).json({
+            message: "Authority verified",
+          });
+        }
+        return res.status(400).json({
+          message: "Authority not verified",
+        });
+      });
     });
   } catch (err) {
     return res.status(500).json({
