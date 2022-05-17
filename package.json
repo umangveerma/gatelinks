@@ -1,0 +1,9 @@
+{
+  "name": "solana-gated-links",
+  "repository": "https://github.com/Vampo7152/gatelinks",
+  "author": "Kira272921",
+  "license": "MIT",
+  "scripts": {
+    "backend": "cd backend && yarn start"
+  }
+}
