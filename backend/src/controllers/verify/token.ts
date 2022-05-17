@@ -20,15 +20,22 @@ const verifyTokenAuthority = async (req: Request, res: Response) => {
     });
   }
 
-  if (await getTokens(walletAddress, mintAddress, amount)) {
-    return res.status(200).json({
-      message: "Authority verified",
+  try {
+    if (await getTokens(walletAddress, mintAddress, amount)) {
+      return res.status(200).json({
+        message: "Authority verified",
+      });
+    }
+
+    return res.status(400).json({
+      message: "Authority not verified",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal server error",
+      error: err,
     });
   }
-
-  return res.status(400).json({
-    message: "Authority not verified",
-  });
 };
 
 export default verifyTokenAuthority;

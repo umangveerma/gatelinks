@@ -19,15 +19,22 @@ const verifyNftAuthority = async (req: Request, res: Response) => {
     });
   }
 
-  const nfts = await getNfts(walletAddress);
+  try {
+    const nfts = await getNfts(walletAddress);
 
-  if (nfts.includes(updateAuthority)) {
-    return res.status(200).json({
-      message: "Authority verified",
-    });
-  } else {
-    return res.status(400).json({
-      message: "Authority not verified",
+    if (nfts.includes(updateAuthority)) {
+      return res.status(200).json({
+        message: "Authority verified",
+      });
+    } else {
+      return res.status(400).json({
+        message: "Authority not verified",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal server error",
+      error: err,
     });
   }
 };
