@@ -11,7 +11,7 @@ const getNfts = async (walletAddress: string) => {
         APISecretKey: constants.blockchainApiSecretKey as string,
       },
     };
-    const network = "mainnet-beta";
+    const network = "devnet";
 
     const res = await axios.get(
       `https://api.blockchainapi.com/v1/solana/wallet/${network}/${walletAddress}/nfts`,
