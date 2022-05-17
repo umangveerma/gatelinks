@@ -24,7 +24,6 @@ const resourcesByUser = async (req: Request, res: Response) => {
         doc.map((resource) => {
           resources.push(resource);
         });
-        console.log("nft:", resources);
       }
     });
 
