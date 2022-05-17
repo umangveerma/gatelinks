@@ -11,8 +11,11 @@ const createResourceViaToken = async (req: Request, res: Response) => {
   const url = req.body.url;
   const mintAddress = req.body.mintAddress;
   const tokenName = req.body.tokenName;
+  const amount = req.body.amount;
 
-  if (!(user || title || description || url || mintAddress || tokenName)) {
+  if (
+    !(user || title || description || url || mintAddress || tokenName || amount)
+  ) {
     return res.status(400).json({
       message: "Missing required fields",
     });
@@ -26,6 +29,7 @@ const createResourceViaToken = async (req: Request, res: Response) => {
       url: url,
       mintAddress: mintAddress,
       tokenName: tokenName,
+      amount: amount,
       resourceId: createResourceId(user, title, "tkn"),
     });
 

@@ -33,6 +33,10 @@ const TokenResourceSchema = new mongoose.Schema({
     type: String,
     default: "tkn",
   },
+  amount: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model("token", TokenResourceSchema);
