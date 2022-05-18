@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { NavBar, CreateModal, ResourceCard } from "../../components";
+import { NavBar, ResourceCard } from "../../components";
 import { Box, Image, Text, Center, useDisclosure } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useEffect, useState } from "react";
@@ -7,33 +7,26 @@ import axios from "axios";
 
 const Account: NextPage = () => {
   const { user } = useUser();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState<any>();
-  console.log(data);
 
   useEffect(() => {
-    axios
-      .get("/api/access")
-      .then((res) => {
-        console.log(res.data);
-        axios
-          .post(
-            `${process.env[`NEXT_PUBLIC_API_URL`]}/info/resourcesByUser`,
-            { user: user?.email },
-            { headers: { Authorization: `Bearer ${res.data.data}` } }
-          )
-          .then((res) => {
-            console.log(res);
-            setData(res.data.resources);
-          });
-      })
-      .catch((err) => console.log(err));
-  }, [user]);
+    async function getData() {
+      const res = await axios.get("/api/access");
+      const data = await axios.post(
+        `${process.env[`NEXT_PUBLIC_API_URL`]}/info/resourcesByUser`,
+        { user: user?.email },
+        { headers: { Authorization: `Bearer ${await res.data}` } }
+      );
+
+      setData(data.data.resources);
+    }
+
+    getData();
+  }, [user, setData]);
 
   return (
     <>
-      <CreateModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      <NavBar handleCreateClick={onOpen} />
+      <NavBar />
 
       <Box
         bgColor="#F9F7F1"
@@ -99,6 +92,8 @@ const Account: NextPage = () => {
               desc={d.description}
               url={d.url}
               type={d.verificationType}
+              key={d._id}
+              id={d.resourceId}
             />
           ))}
         </Box>

@@ -66,7 +66,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
                     Upload w NFT thingy{" "}
                   </Text>
 
-                  <NFTForm />
+                  <NFTForm onClose={onClose} />
                 </TabPanel>
                 <TabPanel>
                   <Text
@@ -79,7 +79,7 @@ const CreateModal: NextComponentType<NextPageContext, {}, Props> = ({
                     Upload w TKN thingy{" "}
                   </Text>
 
-                  <TKNForm />
+                  <TKNForm onClose={onClose} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
