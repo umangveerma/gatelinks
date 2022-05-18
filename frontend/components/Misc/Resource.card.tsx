@@ -7,6 +7,7 @@ interface Props {
   desc: string;
   url: string;
   type: "nft" | "tkn";
+  id: string;
 }
 
 const ResourceCard: NextComponentType<NextPageContext, {}, Props> = ({
@@ -14,6 +15,7 @@ const ResourceCard: NextComponentType<NextPageContext, {}, Props> = ({
   desc,
   url,
   type,
+  id,
 }) => {
   return (
     <>
@@ -47,7 +49,7 @@ const ResourceCard: NextComponentType<NextPageContext, {}, Props> = ({
         </Flex>
 
         <Flex gap="2" alignItems="center" textColor="white">
-          <Link isExternal href={url}>
+          <Link href={`/${id}`}>
             <BsLink45Deg size="25" cursor="pointer" />
           </Link>
         </Flex>

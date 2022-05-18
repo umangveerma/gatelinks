@@ -11,24 +11,23 @@ import {
   MenuItem,
   MenuDivider,
   Link,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
 import { FiLogOut } from "react-icons/fi";
 import { AiOutlineUser } from "react-icons/ai";
+import CreateModal from "../Modals/CreateResource.modal";
 
-interface Props {
-  handleCreateClick?: () => void;
-}
-
-const NavBar: NextComponentType<NextPageContext, {}, Props> = ({
-  handleCreateClick,
-}) => {
+const NavBar: NextComponentType = ({}) => {
   const router = useRouter();
   const { user } = useUser();
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
+      <CreateModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Box
         display="flex"
         flexDir="row"
@@ -64,7 +63,7 @@ const NavBar: NextComponentType<NextPageContext, {}, Props> = ({
             rounded="lg"
             h="10"
             _focus={{}}
-            onClick={handleCreateClick}
+            onClick={onOpen}
           >
             Create Link
           </Button>

@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { NavBar } from "../../components";
+import { NavBar } from "../components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Text, Link, Button, Badge, useToast } from "@chakra-ui/react";
 import { FiExternalLink } from "react-icons/fi";
-import type { PhantomProvider } from "../../@types/Phantom.types";
+import type { PhantomProvider } from "../@types/Phantom.types";
 
 const Resource: NextPage = () => {
   const router = useRouter();
@@ -19,23 +19,23 @@ const Resource: NextPage = () => {
   }, [router, id]);
 
   useEffect(() => {
-    axios.get("/api/access").then((res) => {
-      id
-        ? axios
-            .post(
-              `${process.env[`NEXT_PUBLIC_API_URL`]}/info/${
-                (id.split("-")[1] as string) === "nft" ? "nft" : "token"
-              }`,
-              {
-                resourceId: id,
-              },
-              { headers: { Authorization: `Bearer ${res.data.data}` } }
-            )
-            .then((res) => {
-              setData(res.data.resource);
-            })
-        : null;
-    });
+    async function getData() {
+      const res = await axios.get("/api/access");
+
+      const data = await axios.post(
+        `${process.env[`NEXT_PUBLIC_API_URL`]}/info/${
+          (id?.split("-")[1] as string) === "nft" ? "nft" : "token"
+        }`,
+        {
+          resourceId: id,
+        },
+        { headers: { Authorization: `Bearer ${res.data.data}` } }
+      );
+
+      setData(data.data.resource);
+    }
+
+    getData();
   }, [id]);
 
   const [provider, setProvider] = useState<PhantomProvider | undefined>(
@@ -75,57 +75,71 @@ const Resource: NextPage = () => {
     else setProvider(undefined);
   }, []);
 
-  const verifyNFT = () => {
-    axios
-      .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/verify/nft`, {
-        walletAddress: walletKey,
-        updateAuthority: data.updateAuthority,
-      })
-      .then((res) => {
-        res.status === 200
-          ? toast({
-              title: "Ownership Verified",
-              description: "Ownership verified for this NFT!",
-              status: "success",
-              duration: 4000,
-              isClosable: true,
-            })
-          : toast({
-              title: "Couldn't verify ownership",
-              description: "Oops! Looks like you don't own this NFT",
-              status: "error",
-              duration: 4000,
-              isClosable: true,
-            });
-      })
-      .catch((err) => console.log(err));
+  const verifyNFT = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env[`NEXT_PUBLIC_API_URL`]}/verify/nft`,
+        {
+          walletAddress: walletKey,
+          updateAuthority: data.updateAuthority,
+        }
+      );
+
+      if (res.status === 200) {
+        toast({
+          title: "Ownership Verified",
+          description: "Ownership verified for the SPL Tokens!",
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    } catch (err) {
+      // @ts-ignore
+      if (err.response.status === 400) {
+        toast({
+          title: "Couldn't verify ownership",
+          description: "Oops! Looks like ownership isn't verified",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    }
   };
 
-  const verifySPL = () => {
-    axios
-      .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/verify/token`, {
-        walletAddress: walletKey,
-        mintAddress: { data },
-        amount: { data },
-      })
-      .then((res) => {
-        res.status === 200
-          ? toast({
-              title: "Ownership Verified",
-              description: "Ownership verified for the SPL Tokens!",
-              status: "success",
-              duration: 4000,
-              isClosable: true,
-            })
-          : toast({
-              title: "Couldn't verify ownership",
-              description: "Oops! Looks like ownership isn't verified",
-              status: "error",
-              duration: 4000,
-              isClosable: true,
-            });
-      })
-      .catch((err) => console.log(err));
+  const verifySPL = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env[`NEXT_PUBLIC_API_URL`]}/verify/token`,
+        {
+          walletAddress: walletKey,
+          mintAddress: data.mintAddress,
+          amount: data.amount,
+        }
+      );
+
+      if (res.status === 200) {
+        toast({
+          title: "Ownership Verified",
+          description: "Ownership verified for the SPL Tokens!",
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    } catch (err) {
+      // @ts-ignore
+      if (err.response.status === 400) {
+        toast({
+          title: "Couldn't verify ownership",
+          description: "Oops! Looks like ownership isn't verified",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    }
   };
 
   return (

@@ -1,11 +1,15 @@
 import type { NextComponentType, NextPageContext } from "next";
 import { Box, Input, Button } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useUser } from "@auth0/nextjs-auth0";
 import axios from "axios";
 
-const UploadForm: NextComponentType = ({}) => {
+interface Props {
+  onClose: () => void;
+}
+
+const UploadForm: FC<Props> = ({ onClose }) => {
   const {
     register,
     handleSubmit,
@@ -14,6 +18,7 @@ const UploadForm: NextComponentType = ({}) => {
   } = useForm();
 
   const [formData, setFormData] = useState<any>();
+
   const { user } = useUser();
 
   const onSubmit = (data: any) => setFormData(data);
@@ -22,20 +27,19 @@ const UploadForm: NextComponentType = ({}) => {
   const handleClick = () => {
     const data = {
       user: user?.email,
-      ...formData,
+      ...formData!,
     };
 
-    console.log(data);
     axios
       .get("api/access")
       .then((res) => {
-        console.log(res.data);
-
         axios
           .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/create/nft`, data, {
             headers: { Authorization: `Bearer ${res.data.data}` },
           })
-          .then((res) => console.log(res))
+          .then((res) => {
+            onClose();
+          })
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
