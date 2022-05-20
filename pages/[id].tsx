@@ -29,7 +29,7 @@ const Resource: NextPage = () => {
         {
           resourceId: id,
         },
-        { headers: { Authorization: `Bearer ${res.data.data}` } }
+        { headers: { Authorization: `Bearer ${res.data.token}` } }
       );
 
       setData(data.data.resource);
