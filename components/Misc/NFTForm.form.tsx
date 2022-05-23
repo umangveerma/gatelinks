@@ -33,6 +33,8 @@ const UploadForm: FC<Props> = ({ onClose }) => {
     axios
       .get('api/access')
       .then((res) => {
+        console.log(res.data);
+
         axios
           .post(`${process.env[`NEXT_PUBLIC_API_URL`]}/create/nft`, data, {
             headers: { Authorization: `Bearer ${res.data.token}` },
