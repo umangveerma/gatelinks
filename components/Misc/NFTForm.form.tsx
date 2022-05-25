@@ -1,7 +1,5 @@
-import type { NextComponentType, NextPageContext } from 'next';
 import { Box, Input, Button } from '@chakra-ui/react';
 import React, { FC, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useUser } from '@auth0/nextjs-auth0';
 import axios from 'axios';
 
@@ -10,18 +8,17 @@ interface Props {
 }
 
 const UploadForm: FC<Props> = ({ onClose }) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-
-  const [formData, setFormData] = useState<any>();
+  const [formData, setFormData] = useState<Object>({
+    title: undefined,
+    description: undefined,
+    url: undefined,
+    updateAuthority: undefined,
+    nftName: undefined,
+    nftMarketplace: undefined,
+  });
 
   const { user } = useUser();
 
-  const onSubmit = (data: any) => setFormData(data);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleClick = () => {
@@ -30,8 +27,10 @@ const UploadForm: FC<Props> = ({ onClose }) => {
       ...formData!,
     };
 
+    setLoading(true);
+
     axios
-      .get('api/access')
+      .get('/api/access')
       .then((res) => {
         console.log(res.data);
 
@@ -40,15 +39,22 @@ const UploadForm: FC<Props> = ({ onClose }) => {
             headers: { Authorization: `Bearer ${res.data.token}` },
           })
           .then((res) => {
+            setLoading(false);
             onClose();
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            setLoading(false);
+            console.log(err);
+          });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form>
       <Box
         my='10'
         display='flex'
@@ -69,7 +75,13 @@ const UploadForm: FC<Props> = ({ onClose }) => {
           fontSize='sm'
           placeholder='please enter title...'
           _placeholder={{ color: '#606366', fontWeight: '500' }}
-          {...register('title')}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              title: e.target.value as string,
+            })
+          }
+          isRequired
         />
         <Input
           textColor='gray.700'
@@ -83,7 +95,13 @@ const UploadForm: FC<Props> = ({ onClose }) => {
           fontSize='sm'
           placeholder='enter a short desc'
           _placeholder={{ color: '#606366', fontWeight: '500' }}
-          {...register('description')}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              description: e.target.value as string,
+            })
+          }
+          isRequired
         />
         <Input
           textColor='gray.700'
@@ -97,7 +115,13 @@ const UploadForm: FC<Props> = ({ onClose }) => {
           fontSize='sm'
           placeholder='url for the resource'
           _placeholder={{ color: '#606366', fontWeight: '500' }}
-          {...register('url')}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              url: e.target.value as string,
+            })
+          }
+          isRequired
         />
         <Input
           textColor='gray.700'
@@ -109,9 +133,15 @@ const UploadForm: FC<Props> = ({ onClose }) => {
           px='3'
           fontWeight='500'
           fontSize='sm'
-          placeholder='contract address'
+          placeholder='update authority of the nft'
           _placeholder={{ color: '#606366', fontWeight: '500' }}
-          {...register('updateAuthority')}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              updateAuthority: e.target.value as string,
+            })
+          }
+          isRequired
         />
         <Input
           textColor='gray.700'
@@ -125,7 +155,13 @@ const UploadForm: FC<Props> = ({ onClose }) => {
           fontSize='sm'
           placeholder='name of the nft'
           _placeholder={{ color: '#606366', fontWeight: '500' }}
-          {...register('nftName')}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              nftName: e.target.value as string,
+            })
+          }
+          isRequired
         />
         <Input
           textColor='gray.700'
@@ -139,7 +175,13 @@ const UploadForm: FC<Props> = ({ onClose }) => {
           fontSize='sm'
           placeholder='marketplace link for the nft'
           _placeholder={{ color: '#606366', fontWeight: '500' }}
-          {...register('nftMarketplace')}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              nftMarketplace: e.target.value as string,
+            })
+          }
+          isRequired
         />
 
         <Button
