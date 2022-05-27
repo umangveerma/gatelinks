@@ -1,11 +1,11 @@
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { NavBar } from "../components";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { Box, Text, Link, Button, Badge, useToast } from "@chakra-ui/react";
-import { FiExternalLink } from "react-icons/fi";
-import type { PhantomProvider } from "../@types/Phantom.types";
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { NavBar } from '../components';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Box, Text, Link, Button, Badge, useToast } from '@chakra-ui/react';
+import { FiExternalLink } from 'react-icons/fi';
+import type { PhantomProvider } from '../@types/Phantom.types';
 
 const Resource: NextPage = () => {
   const router = useRouter();
@@ -20,11 +20,11 @@ const Resource: NextPage = () => {
 
   useEffect(() => {
     async function getData() {
-      const res = await axios.get("/api/access");
+      const res = await axios.get('/api/access');
 
       const data = await axios.post(
         `${process.env[`NEXT_PUBLIC_API_URL`]}/info/${
-          (id?.split("-")[1] as string) === "nft" ? "nft" : "token"
+          (id?.split('-')[1] as string) === 'nft' ? 'nft' : 'token'
         }`,
         {
           resourceId: id,
@@ -46,7 +46,7 @@ const Resource: NextPage = () => {
   );
 
   const getProvider = (): PhantomProvider | undefined => {
-    if ("solana" in window) {
+    if ('solana' in window) {
       // @ts-ignore
       const provider = window.solana as any;
       if (provider.isPhantom) return provider as PhantomProvider;
@@ -60,7 +60,7 @@ const Resource: NextPage = () => {
     if (solana) {
       try {
         const response = await solana.connect();
-        console.log("wallet account ", response.publicKey.toString());
+        console.log('wallet account ', response.publicKey.toString());
         setWalletKey(response.publicKey.toString());
       } catch (err) {
         // { code: 4001, message: 'User rejected the request.' }
@@ -87,12 +87,16 @@ const Resource: NextPage = () => {
 
       if (res.status === 200) {
         toast({
-          title: "Ownership Verified",
-          description: "Ownership verified for the SPL Tokens!",
-          status: "success",
+          title: 'Ownership Verified',
+          description: 'Ownership verified for the NFT!',
+          status: 'success',
           duration: 4000,
           isClosable: true,
         });
+
+        setTimeout(() => {
+          window.location.href = data.url;
+        }, 2000);
       }
     } catch (err) {
       // @ts-ignore
@@ -100,7 +104,7 @@ const Resource: NextPage = () => {
         toast({
           title: "Couldn't verify ownership",
           description: "Oops! Looks like ownership isn't verified",
-          status: "error",
+          status: 'error',
           duration: 4000,
           isClosable: true,
         });
@@ -121,12 +125,16 @@ const Resource: NextPage = () => {
 
       if (res.status === 200) {
         toast({
-          title: "Ownership Verified",
-          description: "Ownership verified for the SPL Tokens!",
-          status: "success",
+          title: 'Ownership Verified',
+          description: 'Ownership verified for the SPL Tokens!',
+          status: 'success',
           duration: 4000,
           isClosable: true,
         });
+
+        setTimeout(() => {
+          window.location.href = data.url;
+        }, 2000);
       }
     } catch (err) {
       // @ts-ignore
@@ -134,7 +142,7 @@ const Resource: NextPage = () => {
         toast({
           title: "Couldn't verify ownership",
           description: "Oops! Looks like ownership isn't verified",
-          status: "error",
+          status: 'error',
           duration: 4000,
           isClosable: true,
         });
@@ -147,34 +155,32 @@ const Resource: NextPage = () => {
       <NavBar />
 
       <Box
-        display="flex"
-        justifyContent="center"
-        flexDir="column"
-        gap="8"
-        alignItems="center"
-      >
+        display='flex'
+        justifyContent='center'
+        flexDir='column'
+        gap='8'
+        alignItems='center'>
         <Box
-          h="64"
-          w="64"
-          rounded="md"
-          bgColor="gray.700"
-          mt="16"
-          display="flex"
-          flexDir="column"
-          justifyContent="center"
-          alignItems="center"
-          fontFamily="inter"
-        >
+          h='64'
+          w='64'
+          rounded='md'
+          bgColor='gray.700'
+          mt='16'
+          display='flex'
+          flexDir='column'
+          justifyContent='center'
+          alignItems='center'
+          fontFamily='inter'>
           {data ? (
             <>
-              <Text textColor="gray.100" fontSize="xl">
+              <Text textColor='gray.100' fontSize='xl'>
                 {data.title}
               </Text>
-              <Text textColor="gray.300" fontSize="lg">
+              <Text textColor='gray.300' fontSize='lg'>
                 {data.description}
               </Text>
 
-              <Link isExternal href={data.url} textColor="white">
+              <Link isExternal href={data.url} textColor='white'>
                 <FiExternalLink size={22} />
               </Link>
             </>
@@ -183,11 +189,10 @@ const Resource: NextPage = () => {
 
         {provider && !walletKey && (
           <Button
-            colorScheme="green"
-            fontFamily="inter"
-            fontWeight="500"
-            onClick={connectWallet}
-          >
+            colorScheme='green'
+            fontFamily='inter'
+            fontWeight='500'
+            onClick={connectWallet}>
             Connect to Phantom Wallet
           </Button>
         )}
@@ -195,35 +200,32 @@ const Resource: NextPage = () => {
         {provider && walletKey && (
           <>
             <Badge
-              rounded="full"
-              py="1"
-              px="4"
-              display="grid"
-              placeItems="center"
-              fontFamily="poppins"
-              bgColor="purple.500"
-              textColor="white"
-            >
+              rounded='full'
+              py='1'
+              px='4'
+              display='grid'
+              placeItems='center'
+              fontFamily='poppins'
+              bgColor='purple.500'
+              textColor='white'>
               {/* @ts-ignore */}
               {walletKey}
             </Badge>
 
-            {id?.split("-")[1] === "nft" ? (
+            {id?.split('-')[1] === 'nft' ? (
               <Button
-                colorScheme="green"
-                fontFamily="inter"
-                fontWeight="500"
-                onClick={verifyNFT}
-              >
+                colorScheme='green'
+                fontFamily='inter'
+                fontWeight='500'
+                onClick={verifyNFT}>
                 Verify NFT Ownership
               </Button>
             ) : (
               <Button
-                colorScheme="green"
-                fontFamily="inter"
-                fontWeight="500"
-                onClick={verifySPL}
-              >
+                colorScheme='green'
+                fontFamily='inter'
+                fontWeight='500'
+                onClick={verifySPL}>
                 Verify SPL Ownership
               </Button>
             )}
@@ -232,8 +234,8 @@ const Resource: NextPage = () => {
 
         {!provider && (
           <p>
-            No provider found. Install{" "}
-            <a href="https://phantom.app/">Phantom Browser extension</a>
+            No provider found. Install{' '}
+            <a href='https://phantom.app/'>Phantom Browser extension</a>
           </p>
         )}
       </Box>
